@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 ## Execution
 
-### Kohonen Method
+### Kohonen Method
 
 To run the method, the command is:
 ```bash
