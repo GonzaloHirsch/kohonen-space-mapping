@@ -4,7 +4,7 @@ Example of Kohonen working as a Self-Organizing Map.
 
 The implementation of Kohonen is a modified version of [MiniSom](https://github.com/JustGlowing/minisom). The difference is an exposed method to apply the training in steps to be able to hook up to that and visualize the process.
 
-## Setting Up
+## Setting Up
 
 Create a virtual environment and install all dependencies:
 ```bash
