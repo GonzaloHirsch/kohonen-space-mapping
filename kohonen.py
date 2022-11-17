@@ -3,76 +3,40 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import datagen
+import plot
 
-def generate_data(data_n):
-    # Expect data_n to be a perfect square
-    size = int(np.sqrt(data_n))
-    # Create an X and Y set
-    x = np.linspace(-1, 1, size)
-    y = np.linspace(-1, 1, size)
-    return np.array([[_x, _y] for _y in y for _x in x])
-
-
-def plot_data(points, data_n, filename):
-    # Expect data_n to be a perfect square
-    size = int(np.sqrt(data_n))
-    # Reshape to be in matrix form
-    shape = (size, size, 2)
-    shapedPoints = points.reshape(shape)
-    # Iterate and plot all connections for each point
-    plt.clf()
-    for x in range(size):
-        for y in range(size):
-            _x, _y = [], []
-            if y + 1 < size:
-                _x.append(shapedPoints[x, y][0])
-                _y.append(shapedPoints[x, y][1])
-                _x.append(shapedPoints[x, y + 1][0])
-                _y.append(shapedPoints[x, y + 1][1])
-            if y - 1 >= 0:
-                _x.append(shapedPoints[x, y][0])
-                _y.append(shapedPoints[x, y][1])
-                _x.append(shapedPoints[x, y - 1][0])
-                _y.append(shapedPoints[x, y - 1][1])
-            if x + 1 < size:
-                _x.append(shapedPoints[x, y][0])
-                _y.append(shapedPoints[x, y][1])
-                _x.append(shapedPoints[x + 1, y][0])
-                _y.append(shapedPoints[x + 1, y][1])
-            if x - 1 >= 0:
-                _x.append(shapedPoints[x, y][0])
-                _y.append(shapedPoints[x, y][1])
-                _x.append(shapedPoints[x - 1, y][0])
-                _y.append(shapedPoints[x - 1, y][1])
-            plt.plot(_x, _y, '-r')
-    plt.xlim([-1.5, 1.5])
-    plt.ylim([-1.5, 1.5])
-    plt.savefig(filename)
+def generate_data(fig, data_n):
+    if fig == 'grid':
+        return datagen.generate_grid(data_n)
+    elif fig == 'circle':
+        return datagen.generate_circle(data_n)
+    elif fig == 'triangle':
+        return datagen.generate_triangle(data_n)
+    elif fig == 'random-circle':
+        return datagen.generate_random_circle(data_n)
 
 
-def apply_kohonen(n, it, data_n):
+def plot_data(fig, reference_points, points, data_n, draw_lines, filename):
+    return plot.plot_figure(reference_points, points, data_n, draw_lines, filename)
+
+
+def apply_kohonen(n, it, data_n, fig, draw_lines = False):
     # Generating the data
-    X = generate_data(data_n)
-    # Standarizing data
-    sc = StandardScaler()
-    sc.fit(X)
-    X_Scaled = sc.transform(X)
+    X = generate_data(fig, data_n)
     # Initi the som
     som = MiniSom(x=n, y=n, input_len=2, sigma=1.0, learning_rate=0.5)
-    som.random_weights_init(X_Scaled)
-    som.train_random(data=X_Scaled, num_iteration=it, verbose=True)
+    som.random_weights_init(X)
+    som.train_random(data=X, num_iteration=it, verbose=False)
     # Create folders
-    # checking if the directory demo_folder2 
-    # exist or not.
-    folders = f'results/{n}-{it}-{data_n}'
+    # Checking the directory
+    folders = f'results/{n}-{it}-{data_n}-{fig}'
     if not os.path.isdir(folders):
-        
-        # if the demo_folder2 directory is 
-        # not present then create it.
+        # If the directory is not present then create it.
         os.makedirs(folders)
     # Iterate som
     for i in range(it):
         som.train_step()
-        plot_data(som.get_weights(), data_n, f'{folders}/{i}.jpg')
+        plot_data(fig, X, som.get_weights(), data_n, draw_lines, f'{folders}/{i}.jpg')
     
     

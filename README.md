@@ -19,15 +19,17 @@ pip install -r requirements.txt
 
 To run the method, the command is:
 ```bash
-python main.py -n KOHONEN_SIZE -it ITERATIONS -nd SPACE_POINTS
+python main.py -n KOHONEN_SIZE -it ITERATIONS -nd SPACE_POINTS -fig grid|circle|triangle|random-circle -line
 ```
 - `-n` --> Size of the network (n x n)
 - `-it` --> Number of iterations to use
 - `-nd` --> Total points to attempt to adjust to (should be perfect square, ie, 25, 36, 49, etc) within the range `[-1, 1]`
+- `-fig` --> Point distribution to use.
+- `-line` --> Enables or disables drawing lines between Kohonen points.
 
 Example call:
 ```bash
-python main.py -n 5 -it 3000 -nd 25
+python main.py -n 5 -it 3000 -nd 25 -fig grid 
 ```
 
 ### Image to GIF

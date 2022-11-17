@@ -399,11 +399,6 @@ class MiniSom(object):
         self.data = data
         self.num_iteration = num_iteration
         self.get_decay_rate = get_decay_rate
-        # for t, iteration in enumerate(iterations):
-        #     print("HELLO", t, iteration)
-        #     decay_rate = get_decay_rate(t, len(data))
-        #     self.update(data[iteration], self.winner(data[iteration]),
-        #                 decay_rate, num_iteration)
         if verbose:
             print('\n quantization error:', self.quantization_error(data))
 
